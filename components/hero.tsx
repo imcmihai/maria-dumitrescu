@@ -93,7 +93,7 @@ export default function Hero() {
           <div className="photo-float bg-panel">
             <div className="relative aspect-[3/4] overflow-hidden rounded-[6px]">
               <Image
-                src="/home/maria.png"
+                src="/home/maria-hero.png"
                 alt={`${site.name}, ${site.role.toLowerCase()}`}
                 fill
                 sizes="(min-width: 1024px) 27rem, 13rem"

@@ -1,5 +1,10 @@
 import Hero from "@/components/hero";
+import Story from "@/components/story";
+import ClientPortraits from "@/components/client-portraits";
+import WhatIsTherapy from "@/components/what-is-therapy";
 import Services from "@/components/services";
+import Approach from "@/components/approach";
+import SessionFlow from "@/components/session-flow";
 import { site } from "@/lib/site";
 
 const jsonLd = {
@@ -29,7 +34,13 @@ export default function Home() {
 
       <main className="flex-1">
         <Hero />
+        <Story />
+        <WhatIsTherapy />
         <Services />
+        <ClientPortraits />
+        
+        {/* <Approach />
+        <SessionFlow /> */}
       </main>
     </>
   );

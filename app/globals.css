@@ -360,6 +360,17 @@
     background: var(--color-accent-deep);
   }
 
+  /* Variantă pe fundal accent — cremă plină, se aprinde la hover. */
+  .btn-icon-on-accent {
+    background: var(--color-on-accent);
+    color: var(--color-accent);
+  }
+  .btn-icon-on-accent:hover,
+  .btn-icon-on-accent:focus-visible {
+    background: var(--color-accent-bright);
+    color: var(--color-on-accent);
+  }
+
   /* Săgeata care alunecă la hover. */
   .arrow-slide {
     display: inline-block;
@@ -423,6 +434,31 @@
   }
   .card-accent :where(p, .card-body) {
     color: var(--color-on-accent-soft);
+  }
+
+  /* Card „glass” — secțiunea „Abordarea mea terapeutică”: frost peste creanga
+     de pe fundal alb. `.card-glass--accent` = varianta verde plină. */
+  .card-glass {
+    border-radius: var(--radius-md);
+    padding: 28px;
+    background: color-mix(in oklab, var(--color-surface) 52%, transparent);
+    backdrop-filter: blur(13px) saturate(1.15);
+    -webkit-backdrop-filter: blur(13px) saturate(1.15);
+    border: 1px solid color-mix(in oklab, var(--color-surface) 65%, var(--color-line-strong));
+    box-shadow: 0 24px 50px -32px rgba(72, 67, 67, 0.45);
+  }
+  .card-glass--accent {
+    background: color-mix(in oklab, var(--color-accent) 82%, transparent);
+    border-color: var(--color-line-on-accent);
+    color: var(--color-on-accent);
+  }
+  .card-glass--accent .icon-badge {
+    background: var(--color-on-accent);
+    color: var(--color-accent);
+  }
+  .card-glass--accent .line-art {
+    color: var(--color-on-accent);
+    opacity: 0.22;
   }
 
   .card-lift {
