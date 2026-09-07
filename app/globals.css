@@ -1,26 +1,801 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   SISTEM DE DESIGN — „Câmp deschis”
+   Referință completă: /DESIGN-SYSTEM.md
+   4 culori de bază (brief client):
+     text 484343 · panou f0ebcc · fundal fdfbef · accent 5c6c02
+   ============================================================ */
+
+@theme {
+  /* --- Culori: suprafețe --------------------------------- */
+  --color-bg: #fdfbef; /* fundal pagină — crem cald */
+  --color-surface: #ffffff; /* alb — rame foto, carduri plutitoare */
+  --color-panel: #f0ebcc; /* bej — cardul hero, carduri secundare */
+  --color-panel-2: #f6f2da; /* bej deschis — fundaluri discrete, hover */
+
+  /* --- Culori: text ------------------------------------- */
+  --color-ink: #484343; /* text principal */
+  --color-ink-soft: #6f6863; /* text secundar, descrieri */
+  --color-ink-faint: #9c938c; /* legende, meta, placeholder */
+
+  /* --- Culori: accent (verde măsliniu) ------------------ */
+  --color-accent: #5c6c02; /* butoane primare, cifre, linkuri, suprafețe pline */
+  --color-accent-deep: #4a5702; /* hover pe accent, suprafață mai închisă */
+  --color-accent-bright: #8b9a1f; /* highlight, noduri pe orbită, subliniere */
+  --color-on-accent: #fdfbef; /* text pe accent */
+  --color-on-accent-soft: rgba(253, 251, 239, 0.72);
+
+  /* --- Culori: linii ----------------------------------- */
+  --color-line: rgba(72, 67, 67, 0.14); /* borduri subtile pe crem/bej */
+  --color-line-strong: rgba(72, 67, 67, 0.28);
+  --color-line-on-accent: rgba(253, 251, 239, 0.24);
+
+  /* --- Rază de colț ------------------------------------- */
+  --radius-xs: 8px;
+  --radius-sm: 12px; /* insigne de iconiță */
+  --radius-md: 18px; /* carduri standard */
+  --radius-lg: 24px; /* panouri mari, rame foto */
+  --radius-xl: 32px; /* cardul hero */
+  --radius-pill: 999px;
+
+  /* --- Scară tipografică ------------------------------- */
+  --text-xs: 0.75rem; /* 12 — eyebrow, etichete mono */
+  --text-xs--line-height: 1.4;
+  --text-sm: 0.875rem; /* 14 — pill-uri, meta, text mic */
+  --text-sm--line-height: 1.55;
+  --text-base: 1.0625rem; /* 17 — corp de text */
+  --text-base--line-height: 1.62;
+  --text-lg: 1.25rem; /* 20 — paragraf-lead */
+  --text-lg--line-height: 1.5;
+  --text-xl: 1.5rem; /* 24 — titlu card / H4 */
+  --text-xl--line-height: 1.25;
+  --text-2xl: 2rem; /* 32 — H3 */
+  --text-2xl--line-height: 1.15;
+  --text-3xl: 2.75rem; /* 44 — H2 */
+  --text-3xl--line-height: 1.08;
+  --text-4xl: 3.5rem; /* 56 — H1 (vezi și utilitarul .display-1) */
+  --text-4xl--line-height: 1.04;
+
+  /* --- Mișcare ---------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+  --enter: 0.9s;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-helvetica), "Helvetica Neue", Helvetica, Arial,
+    ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair), "Playfair Display", Georgia,
+    "Times New Roman", serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============================================================
+   Bază
+   ============================================================ */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.62;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      font-size: 18px;
+    }
+  }
+
+  /* Titlurile — Playfair Display. Italicul din accente e sintetizat
+     până se adaugă fișierul real (font-synthesis lăsat activ). */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  h1 em,
+  h2 em,
+  h3 em,
+  h4 em,
+  .display-1 em,
+  .display-2 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--color-accent);
+  }
+
+  strong,
+  b {
+    font-weight: 500;
+  }
+
+  ::selection {
+    background: var(--color-accent-bright);
+    color: var(--color-on-accent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  section[id] {
+    scroll-margin-top: 96px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================
+   Tipografie utilitară
+   ============================================================ */
+
+/* Eticheta mică de deasupra titlurilor, deseori cu „✳” în față. */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--color-ink-soft);
+}
+
+/* Etichete de tip „date” — statistici, tag-uri din marquee. */
+@utility mono-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+@utility display-1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.6rem, 6.2vw, 3.9rem);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+}
+
+@utility display-2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.1rem, 4.6vw, 2.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+}
+
+/* Cifra mare — bara de statistici, indexul cardurilor „Domenii”. */
+@utility numeral {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+}
+
+@utility shell {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+@media (min-width: 768px) {
+  .shell {
+    padding-inline: 40px;
+  }
+}
+
+/* Ritmul vertical al secțiunilor. */
+@utility section-y {
+  padding-block: clamp(4rem, 9vw, 7.5rem);
+}
+
+/* ============================================================
+   Rame foto
+   ============================================================ */
+
+/* Ramă standard — colț rotunjit generos. */
+@utility photo-frame {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-panel-2);
+}
+
+/* Cadru „polaroid” — chenar alb gros, plutitor peste o fotografie. */
+@utility photo-float {
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  padding: 10px 10px 14px;
+  box-shadow: 0 22px 50px -18px rgba(72, 67, 67, 0.35);
+}
+
+/* Panou de sticlă — bara de cifre așezată peste fotografie. */
+@utility glass {
+  background: color-mix(in oklab, var(--color-accent-deep) 62%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid var(--color-line-on-accent);
+}
+
+/* ============================================================
+   Componente
+   ============================================================ */
+
+@layer components {
+  /* --- Butoane ----------------------------------------- */
+
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 26px;
+    border-radius: var(--radius-xs);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      color 0.45s var(--ease-out-soft),
+      background-color 0.45s var(--ease-out-soft),
+      border-color 0.45s var(--ease-out-soft),
+      transform 0.35s var(--ease-out-soft);
+  }
+
+  .btn > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Bula care urcă din partea de jos la hover. */
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    transform: translate3d(0, 101%, 0);
+    transition: transform 0.55s var(--ease-out-soft);
+  }
+
+  .btn:hover::before,
+  .btn:focus-visible::before {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .btn:active {
+    transform: scale(0.975);
+  }
+
+  .btn-primary {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+  .btn-primary::before {
+    background: var(--color-accent-deep);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--color-ink);
+    border: 1.5px solid var(--color-line-strong);
+  }
+  .btn-outline::before {
+    background: var(--color-ink);
+  }
+  .btn-outline:hover,
+  .btn-outline:focus-visible {
+    color: var(--color-bg);
+    border-color: var(--color-ink);
+  }
+
+  .btn-on-accent {
+    background: var(--color-on-accent);
+    color: var(--color-accent);
+  }
+  .btn-on-accent::before {
+    background: var(--color-accent-bright);
+  }
+  .btn-on-accent:hover,
+  .btn-on-accent:focus-visible {
+    color: var(--color-accent-deep);
+  }
+
+  /* Pastilă deschisă — pentru CTA-ul din antet, așezat peste fotografie. */
+  .btn-light {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    box-shadow: 0 10px 30px -14px rgba(72, 67, 67, 0.4);
+  }
+  .btn-light::before {
+    background: var(--color-accent);
+  }
+  .btn-light:hover,
+  .btn-light:focus-visible {
+    color: var(--color-on-accent);
+  }
+
+  /* Buton pătrățos cu săgeată — atașat butoanelor sau de sine stătător. */
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-xs);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    flex: none;
+    transition:
+      background-color 0.4s var(--ease-out-soft),
+      transform 0.4s var(--ease-out-soft);
+  }
+  .btn-icon:hover,
+  .btn-icon:focus-visible {
+    background: var(--color-accent-deep);
+  }
+
+  /* Săgeata care alunecă la hover. */
+  .arrow-slide {
+    display: inline-block;
+    transition: transform 0.45s var(--ease-out-soft);
+  }
+  .btn:hover .arrow-slide,
+  .btn-icon:hover .arrow-slide,
+  .group-arrow:hover .arrow-slide {
+    transform: translateX(4px);
+  }
+
+  /* --- Navigare -------------------------------------- */
+
+  /* Grupul-pastilă din header. */
+  .nav-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 5px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-line);
+    background: color-mix(in oklab, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .nav-link {
+    padding: 9px 16px;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    transition:
+      color 0.3s var(--ease-out-soft),
+      background-color 0.3s var(--ease-out-soft);
+  }
+  .nav-link:hover,
+  .nav-link[aria-current="page"] {
+    color: var(--color-ink);
+    background: var(--color-panel);
+  }
+
+  /* --- Carduri -------------------------------------- */
+
+  .card {
+    border-radius: var(--radius-md);
+    padding: 28px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+  }
+
+  .card-cream {
+    background: var(--color-panel);
+    border-color: transparent;
+  }
+
+  .card-accent {
+    background: var(--color-accent);
+    border-color: transparent;
+    color: var(--color-on-accent);
+  }
+  .card-accent :where(p, .card-body) {
+    color: var(--color-on-accent-soft);
+  }
+
+  .card-lift {
+    transition:
+      transform 0.4s var(--ease-out-soft),
+      box-shadow 0.4s var(--ease-out-soft),
+      border-color 0.4s var(--ease-out-soft);
+  }
+  @media (hover: hover) {
+    .card-lift:hover {
+      transform: translate3d(0, -4px, 0);
+      box-shadow: 0 20px 40px -24px rgba(72, 67, 67, 0.3);
+    }
+  }
+
+  /* Insigna de iconiță de pe cardurile „abordare terapeutică”. */
+  .icon-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+  .card-accent .icon-badge {
+    background: var(--color-on-accent);
+    color: var(--color-accent);
+  }
+
+  /* Titlu de card. */
+  .card-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-xl);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  /* --- Bara de statistici --------------------------- */
+
+  .stat-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .stat-bar > * + * {
+    border-left: 1px solid var(--color-line-on-accent);
+  }
+  /* Sub 640px bara se stivuiește vertical — 3 coloane strânse devin ilizibile. */
+  @media (max-width: 640px) {
+    .stat-bar {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .stat-bar > * {
+      padding: 0 !important;
+    }
+    .stat-bar > * + * {
+      border-left: 0;
+      border-top: 1px solid var(--color-line-on-accent);
+      padding-top: 14px !important;
+    }
+    .stat-label {
+      margin-top: 4px;
+    }
+  }
+  .stat-num {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(1.9rem, 0.9rem + 1.5vw, 2.7rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--color-on-accent);
+  }
+  .stat-num sup {
+    font-size: 0.5em;
+    vertical-align: super;
+    margin-left: 0.05em;
+  }
+  /* Sufix-cuvânt (ex. „& online”) — pe rând propriu, discret. */
+  .stat-suffix {
+    display: block;
+    font-size: 0.34em;
+    font-style: italic;
+    letter-spacing: 0;
+    line-height: 1;
+    margin-top: 0.35em;
+    color: var(--color-on-accent-soft);
+  }
+  .stat-label {
+    margin-top: 10px;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-on-accent-soft);
+  }
+
+  /* --- Cardurile „Domenii cu care lucrez” ----------- */
+
+  .area-index {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.4rem, 1rem + 4vw, 3.6rem);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    color: var(--color-accent);
+  }
+  .card-accent .area-index {
+    color: var(--color-on-accent);
+  }
+
+  /* --- Cardurile de servicii (Acasă) --------------- */
+
+  /* Linia organică din spatele cardului — se desenează singură
+     când cardul intră în viewport (clasa `.is-in` pusă de observer).
+     `pathLength="1"` normalizează traseul, deci dasharray/offset = 1. */
+  .line-art {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    color: var(--color-accent);
+    opacity: 0.16;
+    pointer-events: none;
+  }
+  .card-accent .line-art {
+    color: var(--color-on-accent);
+    opacity: 0.24;
+  }
+  .line-art path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1.6s var(--ease-out-soft);
+    transition-delay: var(--line-delay, 0.15s);
+  }
+  .is-in .line-art path {
+    stroke-dashoffset: 0;
+  }
+
+  /* --- Marquee ------------------------------------- */
+
+  .marquee {
+    overflow: hidden;
+    border-block: 1px solid var(--color-line);
+    padding-block: 14px;
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    gap: 2.5rem;
+    animation: marquee-x var(--marquee-duration, 42s) linear infinite;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.5rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+    color: var(--color-ink-soft);
+    white-space: nowrap;
+  }
+  .marquee-item::after {
+    content: "✳";
+    color: var(--color-accent-bright);
+    font-size: 0.75em;
+  }
+
+  /* --- Orbită („Dacă simți...”) --------------------- */
+
+  /* Inelul concentric pe care sunt așezate etichetele. */
+  .orbit {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid var(--color-line-on-accent);
+  }
+  .orbit-spin {
+    animation: spin-slow 60s linear infinite;
+  }
+  .orbit-node {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-on-accent);
+    box-shadow: 0 0 0 6px color-mix(in oklab, var(--color-on-accent) 22%, transparent);
+  }
+
+  /* Eticheta-pastilă din jurul orbitei sau din hero. */
+  .pill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: var(--radius-pill);
+    background: color-mix(in oklab, var(--color-bg) 88%, transparent);
+    border: 1px solid var(--color-line);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-ink);
+    white-space: nowrap;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .pill-tag::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    flex: none;
+  }
+
+  /* --- Link cu subliniere care se desenează --------- */
+
+  .link-underline {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--color-accent);
+  }
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 1.5px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s var(--ease-out-soft);
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* ================================================
+     Mișcare
+     ================================================ */
+
+  @keyframes marquee-x {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes spin-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes enter-rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 26px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes enter-down {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -14px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes float-y {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -11px, 0);
+    }
+  }
+
+  /* Reveal la scroll — un fade discret, la nivel de secțiune. */
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    transition:
+      opacity 0.6s var(--ease-out-soft),
+      transform 0.6s var(--ease-out-soft);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal="fade"] {
+    transform: none;
+  }
+  [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Intrarea la încărcare — pentru conținutul de deasupra pliului. */
+  [data-enter] {
+    animation-duration: var(--enter);
+    animation-timing-function: var(--ease-out-soft);
+    animation-fill-mode: both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+  [data-enter="rise"] {
+    animation-name: enter-rise;
+  }
+  [data-enter="down"] {
+    animation-name: enter-down;
+  }
+
+  .float-slow {
+    animation: float-y 7.5s ease-in-out infinite;
+    animation-delay: 1.2s;
+  }
+
+  /* Hero — pagina Acasă (DESIGN-SYSTEM.md §3.2).
+     Layout-ul trăiește ca utilitare Tailwind în components/hero.tsx.
+     Aici rămân doar primitivele reutilizabile: .btn*, .photo-float,
+     .glass, .stat-bar / .stat-num, .eyebrow, .float-slow. */
+}
+
+/* ============================================================
+   Accesibilitate — reducere de mișcare
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  [data-reveal],
+  [data-enter] {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .float-slow,
+  .orbit-spin {
+    animation: none !important;
+  }
 }
