@@ -54,12 +54,13 @@ export default function Hero() {
         <div className="flex max-w-5xl flex-col items-center gap-4">
           <h1 className="mt-7 text-balance font-sans text-[clamp(2.5rem,1rem+3.8vw,5.5rem)] font-light leading-[0.9] tracking-[-0.03em] text-ink">
             Terapie pentru anii în care parcă totul trebuie decis deja
-
           </h1>
 
           <p className="mt-6 max-w-lg text-md leading-snug text-ink-soft ">
-            Mă numesc Maria Dumitrescu și sunt psiholog, psihoterapeut de formare integrativă, consilier de dezvoltare personală, consilier vocațional și formator.
-            În relația cu tine îmi doresc să fiu persoana care să te însoțească pe drumul descoperirii de sine, într-un cadru terapeutic securizant și autentic
+            Mă numesc Maria Dumitrescu și sunt psiholog și psihoterapeut de
+            formare integrativă. Îmi doresc să fiu persoana care te însoțește pe
+            drumul descoperirii de sine, într-un cadru terapeutic securizant și
+            autentic.
           </p>
         </div>
 

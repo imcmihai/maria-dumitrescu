@@ -70,9 +70,11 @@ export const homeServices = [
 
 /**
  * Secțiunea „Povestea mea" de pe Acasă — apare înainte de „Servicii", ca punte
- * personală între Maria și cititor. Text integral, furnizat de Maria; nu se
- * rescrie. `pullQuote` = o frază ridicată din paragraful 3, folosită ca accent
- * vizual lângă fotografie (nu înlocuiește textul, care rămâne complet).
+ * personală între Maria și cititor. Text furnizat de Maria; ultimul paragraf
+ * („Aveam 18 ani atunci…") e o punte adăugată editorial spre cititorul adult
+ * de peste 30 de ani — de confirmat cu Maria. `pullQuote` = o frază ridicată
+ * din paragraful 3, folosită ca accent vizual lângă fotografie (nu înlocuiește
+ * textul, care rămâne complet).
  */
 export const story = {
   eyebrow: "povestea mea",
@@ -84,6 +86,7 @@ export const story = {
     "M-am intersectat cu psihoterapia pentru prima dată când aveam 18 ani. Urma să susțin examenul de bacalaureat și simțeam o anxietate de performanță copleșitoare. Pe un fond emoțional deja șubred, cauzat de despărțirea de prietenul din acea vreme, simțeam că nu voi putea face față examenului care bătea la ușă, deși dintotdeauna fusesem o elevă silitoare.",
     "Nu-mi mai amintesc exact cum am intrat în posesia numărului de telefon al unei psihoterapeute din orașul meu natal, cu atât mai mult cu cât, în acea perioadă, nu exista internetul, iar această meserie era aproape necunoscută.",
     "Cert este că, în cabinetul psihoterapeutului, m-am simțit respectată, înțeleasă, acceptată. Am încheiat un angajament cu psihoterapeutul în urma căruia am învățat să mă iubesc și să mă accept așa cum sunt, am învățat tehnici de relaxare și auto-control, mi-am dezvoltat asertivitatea, capacitatea de reziliență și abilitatea de adaptare. Relațiile cu familia și prietenii s-au îmbunătățit, iar examenul de bacalaureat l-am absolvit cu succes.",
+    "Aveam 18 ani atunci. Astăzi, în cabinet, întâlnesc mai ales adulți — cu întrebări mult mai complicate decât un examen: un rost care s-a estompat, o relație care s-a răcit, o pierdere, un diagnostic. Dar respectul și acceptarea de care am avut eu nevoie atunci sunt exact ce îmi doresc să găsești aici.",
   ],
 } as const;
 
@@ -133,33 +136,50 @@ export const clientPortraits = {
 
 /**
  * Secțiunea „Ce este psihoterapia" de pe Acasă — rol educativ: normalizează
- * decizia de a începe terapia și explică ce poate aborda. Text furnizat de
- * Maria (brief §3, pagina „Ce este psihoterapia?"); nu se rescrie.
- * `addresses` = lista din brief, afișată ca index editorial sub paragrafe.
+ * decizia de a începe terapia și explică ce poate aborda.
+ *
+ * Paragrafele au fost rescrise editorial din limbajul de manual al briefului
+ * într-un limbaj direct, potrivit pentru un cititor adult care citește pe
+ * telefon — de confirmat cu Maria. Termenii clinici detaliați rămân pe pagina
+ * dedicată „Ce este psihoterapia?".
+ *
+ * `addressGroups` = motivele frecvente, grupate în „momente de viață" și
+ * „stări care durează" — mai apropiat de felul în care oamenii de peste 30 de
+ * ani își descriu situația decât o listă seacă de diagnostice.
  */
 export const whatIsTherapy = {
   eyebrow: "ce este psihoterapia",
   heading: "Cu ce te poate",
   headingAccent: "ajuta terapia",
   paragraphs: [
-    "Psihoterapia este un tip de tratament care cuprinde o varietate de modalități prin care persoanele care se confruntă cu tulburări emoționale și/sau comportamentale pot fi ajutate să depășească momentele dificile. Psihoterapia poate ajuta nu numai la ameliorarea simptomelor, ci și la identificarea și vindecarea cauzelor profunde psihologice ale stării cuiva, astfel încât persoana să poată funcționa mai bine și să se poată bucura de o bunăstare emoțională.",
-    "Psihoterapia integrativă pune accent pe relația care se formează între client și psihoterapeut, aceasta fiind fundația pe care se clădește întregul proces terapeutic. Prin integrarea proceselor refulate, necontrolate sau nerezolvate ale Sinelui, într-o personalitate coezivă, persoana renunță la utilizarea mecanismelor de apărare care îi inhibă spontaneitatea și îi limitează flexibilitatea în: rezolvarea problemelor, menținerea sănătății, relaționarea cu ceilalți oameni, reintegrarea în societate la capacitate optimă.",
-    "În psihoterapia integrativă se lucrează sistemic, prin echilibrarea dimensiunilor psihologice cognitive, comportamentale, afective și corporale ale persoanei (cogniție, comportament, emoție și corp).",
+    "Terapia nu înseamnă doar să scapi de un simptom. Înseamnă să înțelegi de unde vine — și să te simți din nou în largul tău în propria viață.",
+    "Lucrez integrativ: nu mă limitez la o singură metodă, ci pornesc de la tine — de la ce gândești, ce simți, cum reacționează corpul tău și ce se întâmplă în relațiile tale. Punem lucrurile astea la un loc, în ritmul tău.",
+    "Ce rămâne constant, indiferent de subiect, e relația dintre noi: un spațiu în care poți fi sincer fără să fii judecat. Pe fundația asta se construiește tot restul.",
   ],
-  addressesTitle: "La ce se ajută terapia",
-  addresses: [
-    "Traume",
-    "Evenimente stresante",
-    "Pierderea unei persoane",
-    "Depresie",
-    "Anxietate",
-    "Atacuri de panică",
-    "Fobii",
-    "Stres posttraumatic",
-    "Tulburări de personalitate",
-    "Tulburări alimentare",
-    "Tulburări ale somnului",
-    "Tulburări sexuale",
+  addressesTitle: "Motive frecvente pentru care oamenii încep terapia",
+  addressGroups: [
+    {
+      title: "Momente de viață care te dau peste cap",
+      items: [
+        "Pierderea unei persoane dragi",
+        "Un divorț sau o despărțire",
+        "O schimbare majoră",
+        "Un diagnostic medical",
+        "Un eveniment traumatic",
+      ],
+    },
+    {
+      title: "Stări care durează de prea mult",
+      items: [
+        "Anxietate și neliniște",
+        "Atacuri de panică și fobii",
+        "Tristețe persistentă sau depresie",
+        "Stres posttraumatic",
+        "Somn dificil",
+        "Relația cu mâncarea",
+        "Dificultăți în viața de cuplu sau sexuală",
+      ],
+    },
   ],
 } as const;
 
@@ -270,10 +290,14 @@ export const WHATSAPP_LABEL = "Scrie-mi pe WhatsApp";
  * Bara de cifre din hero (brief §3.1).
  * `pending: true` → valoarea e `[DE COMPLETAT]` și trebuie confirmată de Maria
  * înainte de lansare. Nu se inventează cifre.
+ *
+ * Nu afișăm „ani de experiență": pentru publicul 30+ un număr mic de ani
+ * lucrează împotriva încrederii. Punem în loc repere concrete și neutre la
+ * trecerea timpului (formare, durata ședinței, locație).
  */
 export const heroStats = [
-  { value: "1", suffix: "", label: "ani de experiență", pending: true },
-  { value: "100", suffix: "+", label: "ședințe susținute", pending: true },
+  { value: "100 +", suffix: " ", label: "ședințe susținute", pending: true },
+  { value: "50 minute", suffix: " ", label: "durata unei ședințe", pending: false },
   {
     value: "Sector 4",
     suffix: "",

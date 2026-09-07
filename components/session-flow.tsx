@@ -4,44 +4,45 @@ import type { CSSProperties } from "react";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { sessionFlow, CTA_LABEL } from "@/lib/site";
-import {
-  ArrowIcon,
-  AsteriskMark,
-  ClockIcon,
-  HeartIcon,
-  LockIcon,
-  PathIcon,
-} from "@/components/icons";
+import { ArrowIcon, AsteriskMark } from "@/components/icons";
 
-/* Secțiune „Cum funcționează ședințele" (Acasă) — traseu vertical, cronologic,
-   așezat după „Servicii". Fiecare pas: nod cu iconiță pe o coloană din stânga,
-   text în dreapta. Coloana verticală care leagă nodurile e aceeași linie
-   organică din „Servicii"/„Povestea mea" (`.line-art` + `.is-in`), aici trasată
-   pe verticală și desenându-se singură la intrarea în viewport.
-   Markup ca utilitare Tailwind inline; din globals.css doar primitivele
-   reutilizabile: .line-art, .link-underline, .eyebrow, [data-reveal]. */
+/* Secțiune „Cum funcționează ședințele" (Acasă) — așezată după „Servicii", ca
+   ultim reper practic înainte de contact. Index editorial: fiecare pas e un
+   rând despărțit de linii subțiri — număr Playfair în stânga, reperul scurt și
+   textul în dreapta. Fără iconițe, fără coloană-nod: aceleași primitive ca în
+   restul paginii (`.line-art`, `.eyebrow`, `.link-underline`, [data-reveal]).
+   Pe mobil rândul se stivuiește; pe desktop cele trei zone stau pe o grilă. */
 
-const ICONS = {
-  HeartIcon,
-  ClockIcon,
-  PathIcon,
-  LockIcon,
-} as const;
+/* Trasee lungi care traversează secțiunea diagonal — ecou al crengii din
+   „Servicii". viewBox generic, întins pe secțiune cu preserveAspectRatio="none". */
+const FLOW_LINES = [
+  "M-40 210 C 220 130 380 320 640 270 C 900 220 1040 400 1240 330",
+  "M-40 490 C 200 420 360 580 620 530 C 900 476 1060 620 1240 565",
+  "M160 -40 C 250 220 140 440 310 640 C 430 780 360 900 470 1040",
+];
 
-function Spine() {
+function FlowLines() {
   return (
     <svg
       className="line-art"
-      viewBox="0 0 2 600"
+      viewBox="0 0 1200 800"
       preserveAspectRatio="none"
-      style={{ opacity: 0.32 }}
+      style={{ opacity: 0.09 }}
       aria-hidden
     >
-      <path
-        d="M1 0V600"
-        pathLength={1}
-        style={{ transitionDuration: "2.8s" } as CSSProperties}
-      />
+      {FLOW_LINES.map((d, i) => (
+        <path
+          key={d}
+          d={d}
+          pathLength={1}
+          style={
+            {
+              "--line-delay": `${0.15 + i * 0.25}s`,
+              transitionDuration: "2.6s",
+            } as CSSProperties
+          }
+        />
+      ))}
     </svg>
   );
 }
@@ -49,8 +50,7 @@ function Spine() {
 export default function SessionFlow() {
   const rootRef = useRef<HTMLElement>(null);
 
-  /* Reveal la scroll — pune `.is-in` pe `[data-reveal]` când intră în viewport;
-     asta declanșează și fade-ul pașilor, și desenarea coloanei verticale.
+  /* Reveal la scroll — pune `.is-in` pe `[data-reveal]` când intră în viewport.
      Fără IntersectionObserver, totul devine vizibil imediat. */
   useEffect(() => {
     const root = rootRef.current;
@@ -82,10 +82,19 @@ export default function SessionFlow() {
       aria-labelledby="cum-functioneaza-sedintele-titlu"
       className="relative isolate overflow-hidden bg-panel-2 py-24 lg:py-32"
     >
+      {/* Fundal — linia organică ce se desenează la intrarea în viewport. */}
+      <div
+        data-reveal="fade"
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10"
+      >
+        <FlowLines />
+      </div>
+
       <div className="shell">
         <header
           data-reveal
-          className="mx-auto mb-16 max-w-2xl text-center lg:mb-24"
+          className="mx-auto mb-14 max-w-2xl text-center lg:mb-20"
         >
           <p className="eyebrow inline-flex items-center gap-2">
             <AsteriskMark className="h-3 w-3 text-accent" />
@@ -102,62 +111,37 @@ export default function SessionFlow() {
           </p>
         </header>
 
-        <ol className="relative mx-auto max-w-3xl">
-          {/* Coloana verticală care leagă nodurile — se desenează la reveal. */}
-          <div
-            data-reveal="fade"
-            aria-hidden
-            className="pointer-events-none absolute left-[1.375rem] top-4 bottom-8 w-0.5 -translate-x-1/2 lg:left-[1.75rem]"
-          >
-            <Spine />
-          </div>
-
-          {sessionFlow.steps.map((step, i) => {
-            const Icon = ICONS[step.icon];
-            const isLast = i === sessionFlow.steps.length - 1;
-            return (
-              <li
-                key={step.label}
-                data-reveal
-                style={{ "--reveal-delay": `${i * 90}ms` } as CSSProperties}
-                className={`relative flex gap-5 lg:gap-8 ${
-                  isLast ? "" : "pb-12 lg:pb-16"
-                }`}
+        <ol className="mx-auto max-w-4xl border-t border-[color:var(--color-line)]">
+          {sessionFlow.steps.map((step, i) => (
+            <li
+              key={step.label}
+              data-reveal
+              style={{ "--reveal-delay": `${i * 80}ms` } as CSSProperties}
+              className="grid gap-x-8 gap-y-3 border-b border-[color:var(--color-line)] py-8 lg:grid-cols-[4rem_minmax(0,15rem)_1fr] lg:py-10"
+            >
+              <span
+                aria-hidden
+                className="font-display text-[2rem] font-medium leading-none text-accent lg:text-[2.4rem]"
               >
-                <span
-                  aria-hidden
-                  className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-pill bg-accent text-on-accent shadow-[0_14px_30px_-16px_rgba(72,67,67,0.5)] lg:h-14 lg:w-14"
-                >
-                  <Icon className="h-5 w-5 lg:h-6 lg:w-6" />
-                </span>
+                0{i + 1}
+              </span>
 
-                <div className="flex-1 pt-0.5 lg:pt-2">
-                  <p className="eyebrow flex items-center gap-2">
-                    <span className="font-sans not-italic text-accent">
-                      0{i + 1}
-                    </span>
-                    {step.label}
-                  </p>
-                  <h3 className="mt-2 font-sans text-[clamp(1.35rem,1rem+1vw,1.8rem)] font-medium leading-tight tracking-[-0.01em] text-ink">
-                    {step.heading}
-                  </h3>
-                  <p className="mt-3 max-w-[54ch] leading-relaxed text-ink-soft">
-                    {step.body}
-                  </p>
-                </div>
-              </li>
-            );
-          })}
+              <div>
+                <p className="eyebrow text-accent">{step.label}</p>
+                <h3 className="mt-2 font-sans text-[clamp(1.3rem,1rem+0.9vw,1.7rem)] font-medium leading-tight tracking-[-0.01em] text-ink">
+                  {step.heading}
+                </h3>
+              </div>
+
+              <p className="max-w-[54ch] leading-relaxed text-ink-soft lg:pt-1">
+                {step.body}
+              </p>
+            </li>
+          ))}
         </ol>
 
-        <div
-          data-reveal
-          className="mx-auto mt-16 flex max-w-3xl pl-[calc(2.75rem+1.25rem)] lg:mt-20 lg:pl-[calc(3.5rem+2rem)]"
-        >
-          <Link
-            href="/contact"
-            className="link-underline group-arrow text-sm"
-          >
+        <div data-reveal className="mt-14 flex justify-center lg:mt-20">
+          <Link href="/contact" className="link-underline group-arrow text-sm">
             {CTA_LABEL}
             <ArrowIcon className="arrow-slide h-4 w-4" />
           </Link>

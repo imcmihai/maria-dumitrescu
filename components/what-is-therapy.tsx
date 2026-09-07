@@ -120,31 +120,39 @@ export default function WhatIsTherapy() {
 
             </div>
 
-            {/* Dreapta — „tabelul" cu ce poate aborda psihoterapia */}
+            {/* Dreapta — ce poate aborda psihoterapia, grupat pe două teme */}
             <div data-reveal style={{ "--reveal-delay": "120ms" } as CSSProperties}>
               <h3
                 className="eyebrow text-[1rem] flex items-center gap-2"
                 style={{ color: "var(--color-on-accent)" }}
               >
-
                 {whatIsTherapy.addressesTitle}
               </h3>
-              <ul className="mt-5 border-t border-[color:var(--color-line-on-accent)] lg:mt-7">
-                {whatIsTherapy.addresses.map((item, i) => (
-                  <li
-                    key={item}
-                    data-reveal
-                    style={
-                      { "--reveal-delay": `${140 + i * 40}ms` } as CSSProperties
-                    }
-                    className="flex items-baseline gap-3 border-b border-[color:var(--color-line-on-accent)] py-3.5 text-lg leading-snug text-on-accent lg:text-xl"
-                  >
-                    <AsteriskMark className="h-2.5 w-2.5 shrink-0 translate-y-1 text-on-accent/70" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-                            <div className="mt-10 flex items-center gap-3 lg:mt-12">
+
+              {whatIsTherapy.addressGroups.map((group, gi) => (
+                <div key={group.title} className={gi === 0 ? "mt-5 lg:mt-7" : "mt-8"}>
+                  <p className="text-sm font-medium uppercase tracking-[0.08em] text-on-accent-soft">
+                    {group.title}
+                  </p>
+                  <ul className="mt-3 border-t border-[color:var(--color-line-on-accent)]">
+                    {group.items.map((item, i) => (
+                      <li
+                        key={item}
+                        data-reveal
+                        style={
+                          { "--reveal-delay": `${140 + i * 40}ms` } as CSSProperties
+                        }
+                        className="flex items-baseline gap-3 border-b border-[color:var(--color-line-on-accent)] py-3 text-lg leading-snug text-on-accent lg:text-xl"
+                      >
+                        <AsteriskMark className="h-2.5 w-2.5 shrink-0 translate-y-1 text-on-accent/70" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+
+              <div className="mt-10 flex items-center gap-3 lg:mt-12">
                 <Link
                   href="/contact"
                   className="btn btn-on-accent group-arrow py-[18px]"
