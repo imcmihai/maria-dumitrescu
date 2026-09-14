@@ -1,161 +1,111 @@
-"use client";
-
 import type { CSSProperties } from "react";
-import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { story } from "@/lib/site";
-import { ArrowIcon } from "@/components/icons";
+import { ArrowIcon, AsteriskMark } from "@/components/icons";
+import SectionHead from "@/components/section-head";
 
-/* Secțiune „Povestea mea" (Acasă) — punte personală între Maria și cititor,
-   așezată înaintea secțiunii „Servicii".
-   Layout editorial pe 12 coloane:
-     desktop → stânga: fotografie (rândul 1) + citat-accent și link (rândul 2);
-               dreapta: titlu + textul integral al poveștii (ambele rânduri).
-     telefon → o singură coloană, în ordinea de citit:
-               foto → titlu → poveste → citat → link.
-   Fundal crem cu aceeași linie organică ce se desenează singură ca pe cardurile
-   din „Servicii" (`.line-art` + `.is-in`), aici întinsă discret pe toată
-   secțiunea. Markup ca utilitare Tailwind inline; din globals.css doar
-   primitivele reutilizabile: .line-art, .link-underline, [data-reveal]. */
-
-/* Trasee lungi care traversează secțiunea diagonal — ecou al crengii din
-   „Servicii". viewBox generic, întins pe secțiune cu preserveAspectRatio="none". */
-const STORY_LINES = [
-  "M-40 150 C 220 70 380 250 640 205 C 900 160 1040 330 1240 265",
-  "M-40 430 C 200 360 360 520 620 470 C 900 416 1060 560 1240 505",
-  "M175 -40 C 255 210 150 420 305 620 C 415 765 360 895 470 1040",
-  "M-40 665 C 240 625 420 705 660 665 C 920 620 1050 705 1240 675",
-];
-
-function StoryLines() {
-  return (
-    <svg
-      className="line-art"
-      viewBox="0 0 1200 800"
-      preserveAspectRatio="none"
-      style={{ opacity: 0.09 }}
-      aria-hidden
-    >
-      {STORY_LINES.map((d, i) => (
-        <path
-          key={d}
-          d={d}
-          pathLength={1}
-          style={
-            {
-              "--line-delay": `${0.15 + i * 0.25}s`,
-              transitionDuration: "2.6s",
-            } as CSSProperties
-          }
-        />
-      ))}
-    </svg>
-  );
-}
-
+/* Secțiunea „Povestea mea" (Acasă) — 01. Secțiune tipografic-dominantă:
+   titlul pe toată lățimea, apoi grilă pe 12 coloane cu fotografia lipicioasă
+   în stânga (rămâne în cadru cât se citește textul) și povestea în dreapta.
+   Două obiecte grafice: cifra „18” uriașă (Playfair, bej pe crem) — vârsta la
+   care Maria a intrat prima dată într-un cabinet — și citatul mare, așezat
+   ca un card peste colțul fotografiei. Pe telefon totul curge într-o coloană:
+   titlu → foto → citat → text → link. */
 export default function Story() {
-  const rootRef = useRef<HTMLElement>(null);
-
-  /* Reveal la scroll — pune `.is-in` pe `[data-reveal]` când intră în viewport.
-     Fără IntersectionObserver, totul devine vizibil imediat. */
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const items = Array.from(root.querySelectorAll<HTMLElement>("[data-reveal]"));
-    if (!("IntersectionObserver" in window)) {
-      items.forEach((el) => el.classList.add("is-in"));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-in");
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
-    );
-    items.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
   return (
     <section
-      ref={rootRef}
       id="povestea-mea"
       aria-labelledby="povestea-mea-titlu"
-      className="relative isolate overflow-hidden bg-bg py-24 lg:py-32"
+      className="section-y relative isolate overflow-hidden bg-bg"
     >
-      {/* Fundal — linia organică ce se desenează la intrarea în viewport. */}
-      <div
-        data-reveal="fade"
+      {/* „18” — obiect grafic, decorativ. */}
+      <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
+        data-reveal="fade"
+        className="numeral pointer-events-none absolute -top-[0.06em] right-[-0.04em] -z-10 select-none text-panel"
+        style={{ fontSize: "clamp(13rem, 36vw, 32rem)", "--reveal-delay": "300ms" } as CSSProperties}
       >
-        <StoryLines />
-      </div>
+        18
+      </span>
 
       <div className="shell">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-14">
-          {/* Fotografia — desktop: stânga, rândul 1 */}
-          <figure
-            data-reveal
-            className="mx-auto w-[min(78%,20rem)] sm:w-[min(58%,22rem)] lg:col-start-1 lg:col-span-5 lg:row-start-1 lg:mx-0 lg:w-full lg:max-w-[24rem]"
-          >
-            <div className="relative aspect-[3/4] overflow-hidden rounded-[6px]">
-              <Image
-                src="/home/maria2.png"
-                alt="Maria Dumitrescu, psiholog și psihoterapeut, alături de câteva cărți de psihoterapie integrativă."
-                fill
-                sizes="(min-width: 1024px) 24rem, (min-width: 640px) 22rem, 78vw"
-                className="object-cover"
-              />
-            </div>
-          </figure>
+        <SectionHead
+          index="01"
+          eyebrow={story.eyebrow}
+          heading={story.heading}
+          accent={story.headingAccent}
+          id="povestea-mea-titlu"
+          headingClassName="max-w-[16ch]"
+        />
 
-          {/* Titlu + poveste — desktop: dreapta, ambele rânduri */}
-          <div className="lg:col-start-6 lg:col-span-7 lg:row-start-1 lg:row-span-2">
-            <header data-reveal>
-              <h2
-                id="povestea-mea-titlu"
-                className="max-w-[18ch] text-balance font-sans text-[clamp(2rem,1rem+2.6vw,3.4rem)] font-light leading-[1.05] tracking-[-0.02em] text-ink"
+        <div className="mt-16 grid gap-12 lg:mt-24 lg:grid-cols-12 lg:gap-x-12">
+          {/* Fotografia — lipicioasă pe desktop */}
+          <div className="lg:col-span-5">
+            <div className="lg:sticky lg:top-24">
+              <figure
+                data-reveal
+                className="relative mx-auto w-[min(84%,22rem)] lg:mx-0 lg:w-full lg:max-w-[26rem]"
               >
-                {story.heading} <em>{story.headingAccent}</em>
-              </h2>
-            </header>
+                <div className="img-reveal relative aspect-[4/5] rounded-lg bg-panel-2">
+                  <Image
+                    src="/home/maria2.png"
+                    alt="Maria Dumitrescu, psiholog și psihoterapeut, ținând în brațe un buchet de lalele și narcise."
+                    fill
+                    sizes="(min-width: 1024px) 26rem, (min-width: 640px) 22rem, 84vw"
+                    className="object-cover object-[50%_20%]"
+                  />
+                </div>
+                <figcaption className="mono-label mt-3 flex items-center justify-between text-ink-faint">
+                  <span>{story.caption}</span>
+                  <AsteriskMark className="h-3 w-3 text-accent" />
+                </figcaption>
 
+                {/* Citatul — card care iese peste colțul fotografiei pe desktop */}
+                <blockquote
+                  data-reveal
+                  style={{ "--reveal-delay": "260ms" } as CSSProperties}
+                  className="quote-display mt-8 rounded-md bg-panel px-7 py-6 text-ink shadow-[0_24px_50px_-30px_rgba(72,67,67,0.35)] lg:absolute lg:-right-28 lg:bottom-20 lg:mt-0 lg:max-w-[15ch] xl:-right-36"
+                >
+                  „{story.pullQuote}”
+                </blockquote>
+              </figure>
+            </div>
+          </div>
+
+          {/* Povestea */}
+          <div className="lg:col-span-6 lg:col-start-7">
             <div
-              data-reveal
-              style={{ "--reveal-delay": "90ms" } as CSSProperties}
-              className="mt-10 flex max-w-[52ch] flex-col gap-5 text-ink-soft lg:mt-12"
+              data-reveal-group
+              className="flex flex-col gap-6 text-ink-soft"
+              style={{ "--stagger": "110ms" } as CSSProperties}
             >
-              {story.paragraphs.map((paragraph) => (
-                <p key={paragraph.slice(0, 24)} className="leading-relaxed">
+              {story.paragraphs.map((paragraph, i) => (
+                <p
+                  key={paragraph.slice(0, 24)}
+                  data-reveal-child
+                  style={{ "--i": i } as CSSProperties}
+                  className={
+                    i === 0
+                      ? "max-w-[38ch] text-xl leading-snug text-ink"
+                      : "max-w-[52ch] leading-relaxed"
+                  }
+                >
                   {paragraph}
                 </p>
               ))}
             </div>
-          </div>
 
-          {/* Citat + link — desktop: stânga, sub fotografie (rândul 2) */}
-          <div
-            data-reveal
-            className="lg:col-start-1 lg:col-span-5 lg:row-start-2 lg:self-start"
-          >
-            <blockquote className="max-w-[34ch]  border-accent font-display text-[clamp(1.5rem,1rem+1.4vw,2rem)] font-medium leading-[1.25] tracking-[-0.01em] text-ink">
-              „{story.pullQuote}”
-            </blockquote>
-
-            <Link
-              href="/despre"
-              className="link-underline group-arrow mt-8 inline-flex text-sm"
-            >
-              Mai multe despre drumul meu
-              <ArrowIcon className="arrow-slide h-4 w-4" />
-            </Link>
+            <div data-reveal className="mt-12">
+              <span className="rule-draw rule-draw--soft mb-8 block" aria-hidden />
+              <Link
+                href="/despre"
+                className="link-underline group-arrow inline-flex text-sm"
+              >
+                Mai multe despre drumul meu
+                <ArrowIcon className="arrow-slide h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>

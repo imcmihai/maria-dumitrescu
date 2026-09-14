@@ -1,21 +1,17 @@
-"use client";
-
 import type { CSSProperties } from "react";
-import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { homeServices } from "@/lib/site";
-import { ArrowIcon, AsteriskMark } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons";
+import SectionHead from "@/components/section-head";
 
-/* Secțiune „Servicii" pe Acasă (brief §3.1 — „Cum putem lucra împreună").
-   Card-based: index mare + titlu + o propoziție + link spre ancora din
-   pagina /servicii. Fundal de secțiune: creanga din public/home, cu
-   `mix-blend-multiply` ca albul să dispară în crem. Layout ca utilitare
-   Tailwind inline; globals.css ține doar `.line-art` (linia animată). */
+/* Secțiunea „Servicii" (Acasă) — 04. Singura grilă de carduri a paginii:
+   trei carduri înalte, decalate pe verticală, peste creanga din fundal
+   (`mix-blend-multiply` face albul să dispară în crem). Fiecare card: index
+   Playfair mare (`.area-index`), titlu, o propoziție, link spre ancora din
+   `/servicii`. Linia organică se desenează la intrarea în viewport. Antet
+   „split” cu link spre tarife în coloana din dreapta. */
 
-/* Trei seturi de trasee organice, câte unul per card — curbe care traversează
-   diagonal cardul, evocând creanga din fundal. viewBox generic, întins pe card
-   cu preserveAspectRatio="none". */
 const LINE_SETS: string[][] = [
   [
     "M-10 300 C 60 250 90 195 150 188 C 214 180 250 128 320 88",
@@ -48,50 +44,21 @@ function ServiceLines({ index }: { index: number }) {
           key={d}
           d={d}
           pathLength={1}
-          style={{ "--line-delay": `${0.2 + i * 0.22}s` } as CSSProperties}
+          style={{ "--line-delay": `${0.3 + i * 0.22}s` } as CSSProperties}
         />
       ))}
     </svg>
   );
 }
 
+const OFFSETS = ["", "lg:translate-y-14", "lg:translate-y-6"];
+
 export default function Services() {
-  const rootRef = useRef<HTMLElement>(null);
-
-  /* Reveal la scroll: pune `.is-in` pe elementele `[data-reveal]` din secțiune
-     când intră în viewport — declanșează și fade-ul cardului, și desenarea
-     liniei. Fără IntersectionObserver, totul devine vizibil imediat. */
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const items = Array.from(
-      root.querySelectorAll<HTMLElement>("[data-reveal]"),
-    );
-    if (!("IntersectionObserver" in window)) {
-      items.forEach((el) => el.classList.add("is-in"));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-in");
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.2, rootMargin: "0px 0px -8% 0px" },
-    );
-    items.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
   return (
     <section
-      ref={rootRef}
       id="servicii-acasa"
       aria-labelledby="servicii-acasa-titlu"
-      className="relative isolate flex items-center overflow-hidden py-24 lg:min-h-svh lg:py-32"
+      className="section-y relative isolate overflow-hidden"
     >
       {/* Fundal — crem plin + creanga peste el (albul iese la multiply). */}
       <div className="absolute inset-0 -z-10 bg-bg" />
@@ -102,59 +69,57 @@ export default function Services() {
         sizes="100vw"
         className="-z-10 object-cover object-top opacity-80 mix-blend-multiply lg:object-right-top"
       />
-      {/* Voal discret ca fundalul să nu concureze cu cardurile. */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-b from-bg/60 via-bg/10 to-bg"
+        className="absolute inset-0 -z-10 bg-gradient-to-b from-bg/70 via-bg/10 to-bg"
       />
 
-      <div className="shell w-full">
-        <header
-          data-reveal
-          className="mx-auto mb-14 max-w-2xl text-center lg:mb-20"
-        >
-          <p className="eyebrow inline-flex items-center gap-2">
-            <AsteriskMark className="h-3 w-3 text-accent" />
-            servicii
-          </p>
-          <h2
-            id="servicii-acasa-titlu"
-            className="mt-4 text-balance font-sans text-[clamp(2rem,1rem+2.6vw,3.4rem)] font-light leading-[1.05] tracking-[-0.02em] text-ink"
-          >
-            Cum putem lucra <em>împreună</em>
-          </h2>
-        </header>
+      <div className="shell">
+        <SectionHead
+          index="04"
+          eyebrow="servicii"
+          heading="Cum putem lucra"
+          accent="împreună"
+          layout="split"
+          id="servicii-acasa-titlu"
+          aside={
+            <Link href="/tarife" className="link-underline group-arrow self-start text-sm">
+              Vezi serviciile și tarifele
+              <ArrowIcon className="arrow-slide h-4 w-4" />
+            </Link>
+          }
+        />
 
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <ul
+          data-reveal-group
+          style={{ "--stagger": "120ms" } as CSSProperties}
+          className="mt-16 grid gap-4 sm:grid-cols-2 lg:mt-24 lg:grid-cols-3 lg:gap-6"
+        >
           {homeServices.map((service, i) => {
             const accent = i === 1;
-            const offset =
-              i === 1 ? "lg:translate-y-12" : i === 2 ? "lg:translate-y-5" : "";
             return (
               <li
                 key={service.slug}
-                data-reveal
-                style={{ "--reveal-delay": `${i * 90}ms` } as CSSProperties}
-                className={`${offset} max-lg:[&:last-child]:sm:col-span-2`}
+                data-reveal-child
+                style={{ "--i": i } as CSSProperties}
+                className={`${OFFSETS[i]} max-lg:[&:last-child]:sm:col-span-2`}
               >
                 <Link
                   href={`/servicii#${service.slug}`}
-                  className={`card card-lift group relative flex h-full min-h-[18rem] flex-col overflow-hidden ${
+                  className={`card card-lift group relative flex h-full min-h-[22rem] flex-col overflow-hidden ${
                     accent ? "card-accent" : "card-cream"
                   }`}
                 >
                   <ServiceLines index={i} />
 
-                  <span
-                    className={`relative z-10 font-sans text-[clamp(2.4rem,1.4rem+3vw,3.6rem)] font-light leading-none tracking-[-0.02em] ${
-                      accent ? "text-on-accent" : "text-accent"
-                    }`}
-                  >
-                    0{i + 1}
-                  </span>
+                  <span className="area-index relative z-10">0{i + 1}</span>
 
-                  <div className="relative z-10 mt-auto flex flex-col gap-3 pt-10">
-                    <h3 className="font-sans text-[1.35rem] font-medium leading-tight tracking-[-0.01em]">
+                  <div className="relative z-10 mt-auto flex flex-col gap-3 pt-14">
+                    <h3
+                      className={`font-sans text-[1.4rem] font-medium leading-tight tracking-[-0.01em] ${
+                        accent ? "text-on-accent" : "text-ink"
+                      }`}
+                    >
                       {service.title}
                     </h3>
                     <p
@@ -165,7 +130,7 @@ export default function Services() {
                       {service.blurb}
                     </p>
                     <span
-                      className={`link-underline mt-1 text-sm ${
+                      className={`link-underline mt-2 text-sm ${
                         accent ? "text-on-accent" : ""
                       }`}
                     >

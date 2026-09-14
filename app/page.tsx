@@ -5,6 +5,9 @@ import WhatIsTherapy from "@/components/what-is-therapy";
 import Services from "@/components/services";
 import Approach from "@/components/approach";
 import SessionFlow from "@/components/session-flow";
+import Testimonials from "@/components/testimonials";
+import Credentials from "@/components/credentials";
+import FinalCta from "@/components/final-cta";
 import { site } from "@/lib/site";
 
 const jsonLd = {
@@ -23,12 +26,17 @@ const jsonLd = {
   knowsLanguage: "ro",
 };
 
+/* Acasă — ritmul de scroll (DESIGN-SYSTEM.md §3.8):
+   Hero (foto + titlu mare) → 01 Poveste (tipografic, foto lipicioasă) →
+   02 Portrete (rail dens de carduri) → 03 Ce este psihoterapia (bloc verde) →
+   04 Servicii (grilă de carduri pe creangă) → 05 Abordare (index de metode +
+   foto) → 06 Cum funcționează (pași pe orizontală) → 07 Recomandări (un citat
+   mare) → Acreditări (bandă compactă) → 08 CTA final (duoton) → Footer. */
 export default function Home() {
   return (
     <>
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
@@ -38,9 +46,11 @@ export default function Home() {
         <ClientPortraits />
         <WhatIsTherapy />
         <Services />
+        <Approach />
         <SessionFlow />
-
-        {/* <Approach /> */}
+        <Testimonials />
+        <Credentials />
+        <FinalCta />
       </main>
     </>
   );

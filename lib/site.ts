@@ -305,3 +305,117 @@ export const heroStats = [
     pending: false,
   },
 ] as const;
+
+/**
+ * Hero (Acasă) — textul care era hardcodat în `components/hero.tsx`.
+ * `heading` + `headingAccent` = H1; accentul e cuvântul-cheie pus în Playfair
+ * italic. `lead` = paragraful de bun venit (din „Cine sunt eu", brief §2).
+ */
+export const hero = {
+  eyebrow: "Psiholog & psihoterapeut · București",
+  heading: "Terapie pentru anii în care parcă totul trebuie",
+  headingAccent: "decis deja",
+  lead: "Mă numesc Maria Dumitrescu și sunt psiholog și psihoterapeut de formare integrativă. Îmi doresc să fiu persoana care te însoțește pe drumul descoperirii de sine, într-un cadru terapeutic securizant și autentic.",
+  caption: "Psihoterapie integrativă",
+  scrollCue: "derulează",
+} as const;
+
+/**
+ * Recomandări (structura-website-psiholog.md §5). `quote` = textul integral,
+ * așa cum l-a dat clienta — se folosește pe pagina dedicată. `excerpt` = tăietură
+ * editorială pentru citatul mare de pe Acasă: fraze întregi, în ordinea originală,
+ * lipsurile marcate cu „[…]"; nu se reformulează. La Laura M. s-a omis „trăite
+ * anul trecut" (reper temporal care se învechește pe un site) — de confirmat cu Maria.
+ */
+export const testimonials = {
+  eyebrow: "recomandări",
+  heading: "În cuvintele",
+  headingAccent: "celor cu care am lucrat",
+  items: [
+    {
+      name: "Ani R.",
+      age: 38,
+      excerpt:
+        "Maria m-a impresionat prin capacitatea ei de a empatiza, de a identifica nevoile mele și de a rămâne imparțială în același timp. […] Este o persoană blândă, inteligentă și foarte motivată să contribuie la evoluția oamenilor și asta m-a ajutat să mă deschid ușor în fața ei și să îmi lucrez teme profunde.",
+      quote:
+        "Maria m-a impresionat prin capacitatea ei de a empatiza, de a identifica nevoile mele și de a rămâne imparțială în același timp. Și-a folosit foarte natural cunoștințele în domeniu și experiența profesională și personală pentru a mă ghida să (re)descopăr oamenii din jurul meu și pe mine. Este o persoană blândă, inteligentă și foarte motivată să contribuie la evoluția oamenilor și asta m-a ajutat să mă deschid ușor în fața ei și să îmi lucrez teme profunde.",
+    },
+    {
+      name: "Alina C.",
+      age: 45,
+      excerpt:
+        "Sunt recunoscătoare pentru faptul că am lucrat cu Maria. Îi mulțumesc pentru cuvintele empatice, grozave cu care m-a susținut, pentru emoțiile plăcute pe care le-am trăit alături de ea, pentru sfaturile și pentru tot suportul acordate. Pentru mine a fost o experiență uimitoare.",
+      quote:
+        "Sunt recunoscătoare pentru faptul că am lucrat cu Maria. Îi mulțumesc pentru cuvintele empatice, grozave cu care m-a susținut, pentru emoțiile plăcute pe care le-am trăit alături de ea, pentru sfaturile și pentru tot suportul acordate. Pentru mine a fost o experiență uimitoare.",
+    },
+    {
+      name: "Laura M.",
+      age: 37,
+      excerpt:
+        "În momentele mele dificile, a fost alături de mine și m-a ajutat cu profesionalism, tact psihologic și cu multă răbdare și empatie să-mi depășesc anxietatea generalizată, să-mi dezvolt încrederea în mine și stima de sine […]. Maria m-a ajutat nu doar să-mi rezolv problemele care îmi periclitau calitatea vieții, ci să-mi vindec sufletul și să evoluez spiritual și profesional.",
+      quote:
+        "Îi mulțumesc cu prețuire Mariei pentru că, în momentele mele dificile, trăite anul trecut, a fost alături de mine și m-a ajutat cu profesionalism, tact psihologic și cu multă răbdare și empatie să-mi depășesc anxietatea generalizată, să-mi dezvolt încrederea în mine și stima de sine, să construiesc relații umane colaborative și să asimilez pierderile suferite într-un mod creator, să-mi depășesc sentimentul de însingurare și să-mi înving traumele suferite și depresia. De fiecare dată, m-a încurajat și mi-a securizat sentimentul că pot vorbi cu ea liber despre gândurile, emoțiile, temerile și dilemele mele existențiale. A participat, într-un mod facil și natural, în tot acest proces alături de mine și, pe măsură ce am călătorit împreună, m-a ghidat treptat spre o destinație cu mai multă compasiune, înțelegere, auto-cunoaștere și vindecare. Cu alte cuvinte, Maria m-a ajutat nu doar să-mi rezolv problemele care îmi periclitau calitatea vieții, ci să-mi vindec sufletul și să evoluez spiritual și profesional.",
+    },
+  ],
+} as const;
+
+/**
+ * Acreditări și pregătire profesională (structura-website-psiholog.md §2).
+ * Pe Acasă apar ca bandă compactă (recomandarea clientei: să nu întrerupă
+ * fluxul emoțional): `primary` = cele trei repere de încredere, mereu vizibile;
+ * `trainings` = lista completă, în acordeon.
+ */
+export const credentials = {
+  eyebrow: "acreditări",
+  heading: "Formare și afilieri",
+  primary: [
+    {
+      label: "Atestat",
+      value:
+        "Psihoterapeut cu specializare în psihoterapie integrativă, atestat de Colegiul Psihologilor din România",
+    },
+    { label: "Membru", value: "Colegiul Psihologilor din România" },
+    {
+      label: "Membru",
+      value: "Asociația de Psihoterapia Integrativă (Școala Richard Erskine)",
+    },
+  ],
+  trainingsLabel: "Formări și specializări",
+  trainings: [
+    {
+      title: "Formare în psihoterapie integrativă",
+      org: "Asociația de Psihoterapia Integrativă (Școala Richard Erskine)",
+    },
+    {
+      title: "Specializare în psiho-oncologie",
+      org: "Asociația SMART PSI",
+    },
+    {
+      title: "Formator",
+      org: "Centrul de pregătire profesională CEPECOM",
+      note: "Curs autorizat de Autoritatea Națională pentru Calificări și recunoscut de Ministerul Muncii, Familiei și Protecției Sociale și Ministerul Educației Naționale.",
+    },
+    {
+      title: "Consilier vocațional",
+      org: "Centrul de Training și Psihologie Confident",
+      note: "Curs autorizat de Ministerul Muncii, Familiei și Protecției Sociale, Ministerul Educației și Cercetării, Tineretului și Sportului și Autoritatea Națională pentru Calificări.",
+    },
+    {
+      title: "Consilier pentru dezvoltare personală",
+      org: "Centrul de Training și Psihologie Confident",
+      note: "Curs autorizat de aceleași instituții.",
+    },
+  ],
+} as const;
+
+/**
+ * CTA final (Acasă) — secțiunea de închidere, înainte de footer. Titlul e
+ * îndemnul recomandat de clientă pentru Contact (structura §6). Fără promisiuni
+ * de timp de răspuns — nu se inventează angajamente.
+ */
+export const finalCta = {
+  eyebrow: "programare",
+  heading: "Scrie-mi și hotărâm împreună",
+  headingAccent: "când ne putem întâlni",
+  lead: "Primul pas e un mesaj — la telefon, pe WhatsApp sau pe e-mail. Stabilim împreună o primă întâlnire, la cabinet sau online.",
+} as const;

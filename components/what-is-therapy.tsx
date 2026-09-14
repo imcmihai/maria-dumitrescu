@@ -1,24 +1,17 @@
-"use client";
-
 import type { CSSProperties } from "react";
-import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { whatIsTherapy, CTA_LABEL } from "@/lib/site";
 import { ArrowIcon, AsteriskMark } from "@/components/icons";
+import SectionHead from "@/components/section-head";
 
-/* Secțiune „Ce este psihoterapia" (Acasă) — rol educativ, așezată după
-   „Povestea mea". Un singur container plin, verde-accent, cu colțuri generos
-   rotunjite (ecou al panourilor din hero). Pe desktop, două coloane:
-     stânga → eyebrow + titlu + textul integral + CTA (perechea buton + săgeată
-              ca în hero);
-     dreapta → „tabelul" cu ce poate aborda psihoterapia, listă cu rânduri
-               despărțite prin linii subțiri și font mărit.
-   Linia organică din fundal (`.line-art` + `.is-in`) e recolorată pentru
-   fundalul accent. Markup ca utilitare Tailwind inline; din globals.css doar
-   primitivele reutilizabile: .line-art, .btn*, .eyebrow, [data-reveal]. */
+/* Secțiunea „Ce este psihoterapia" (Acasă) — 03. Blocul plin, verde-accent,
+   cu colțuri generoase (ecou al panourilor din hero): singurul container
+   închis la culoare al paginii, deci ancora ei vizuală. Pe desktop, două
+   coloane inegale: stânga → primul paragraf ridicat ca frază-afirmație în
+   Playfair italic, apoi restul textului și CTA-ul; dreapta → „tabelul" cu
+   motivele frecvente, rânduri despărțite de linii care se desenează pe rând.
+   `data-dark` comută cursorul custom pe crem. */
 
-/* Trasee lungi care traversează containerul diagonal — ecou al crengii din
-   „Servicii". viewBox generic, întins pe container cu preserveAspectRatio="none". */
 const THERAPY_LINES = [
   "M-40 230 C 210 150 370 330 630 285 C 890 240 1050 400 1240 335",
   "M-40 500 C 190 440 350 580 610 535 C 890 486 1060 610 1240 560",
@@ -31,7 +24,7 @@ function TherapyLines() {
       className="line-art"
       viewBox="0 0 1200 800"
       preserveAspectRatio="none"
-      style={{ color: "var(--color-on-accent)", opacity: 0.16 }}
+      style={{ color: "var(--color-on-accent)", opacity: 0.14 }}
       aria-hidden
     >
       {THERAPY_LINES.map((d, i) => (
@@ -41,7 +34,7 @@ function TherapyLines() {
           pathLength={1}
           style={
             {
-              "--line-delay": `${0.15 + i * 0.25}s`,
+              "--line-delay": `${0.2 + i * 0.25}s`,
               transitionDuration: "2.6s",
             } as CSSProperties
           }
@@ -52,43 +45,19 @@ function TherapyLines() {
 }
 
 export default function WhatIsTherapy() {
-  const rootRef = useRef<HTMLElement>(null);
-
-  /* Reveal la scroll — pune `.is-in` pe `[data-reveal]` când intră în viewport.
-     Fără IntersectionObserver, totul devine vizibil imediat. */
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const items = Array.from(root.querySelectorAll<HTMLElement>("[data-reveal]"));
-    if (!("IntersectionObserver" in window)) {
-      items.forEach((el) => el.classList.add("is-in"));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-in");
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
-    );
-    items.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
+  const [statement, ...rest] = whatIsTherapy.paragraphs;
 
   return (
     <section
-      ref={rootRef}
       id="ce-este-psihoterapia"
       aria-labelledby="ce-este-psihoterapia-titlu"
       className="px-2.5 py-10 lg:py-16"
     >
       <div className="mx-auto max-w-[1600px]">
-        <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-accent px-6 py-14 text-on-accent sm:px-10 sm:py-16 lg:px-14 lg:py-20 xl:px-20 2xl:px-28">
-          {/* Fundal — linia organică ce se desenează la intrarea în viewport. */}
+        <div
+          data-dark
+          className="relative isolate overflow-hidden rounded-xl bg-accent px-6 py-16 text-on-accent sm:px-10 lg:px-16 lg:py-24 xl:px-24"
+        >
           <div
             data-reveal="fade"
             aria-hidden
@@ -97,66 +66,45 @@ export default function WhatIsTherapy() {
             <TherapyLines />
           </div>
 
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-x-16 xl:gap-x-24">
-            {/* Stânga — eyebrow + titlu + text + CTA */}
-            <div data-reveal>
+          <SectionHead
+            index="03"
+            eyebrow={whatIsTherapy.eyebrow}
+            heading={whatIsTherapy.heading}
+            accent={whatIsTherapy.headingAccent}
+            tone="on-accent"
+            id="ce-este-psihoterapia-titlu"
+            headingClassName="max-w-[13ch]"
+          />
 
-              <h2
-                id="ce-este-psihoterapia-titlu"
-                className=" max-w-[16ch] text-balance font-sans text-[clamp(2rem,1rem+2.6vw,3.4rem)] font-light leading-[1.05] tracking-[-0.02em] text-on-accent"
+          <div className="mt-14 grid gap-14 lg:mt-20 lg:grid-cols-12 lg:gap-x-16">
+            {/* Stânga — afirmație + text + CTA */}
+            <div className="lg:col-span-6">
+              <p data-reveal className="quote-display max-w-[24ch] text-on-accent">
+                {statement}
+              </p>
+
+              <div
+                data-reveal-group
+                className="mt-9 flex max-w-[50ch] flex-col gap-5 text-on-accent-soft"
               >
-                {whatIsTherapy.heading}{" "}
-                <em className="text-on-accent">{whatIsTherapy.headingAccent}</em>
-              </h2>
-
-              <div className="mt-8 flex max-w-[54ch] flex-col gap-5 text-on-accent-soft lg:mt-10">
-                {whatIsTherapy.paragraphs.map((paragraph) => (
-                  <p key={paragraph.slice(0, 24)} className="leading-relaxed">
+                {rest.map((paragraph, i) => (
+                  <p
+                    key={paragraph.slice(0, 24)}
+                    data-reveal-child
+                    style={{ "--i": i } as CSSProperties}
+                    className="leading-relaxed"
+                  >
                     {paragraph}
                   </p>
                 ))}
               </div>
 
-
-            </div>
-
-            {/* Dreapta — ce poate aborda psihoterapia, grupat pe două teme */}
-            <div data-reveal style={{ "--reveal-delay": "120ms" } as CSSProperties}>
-              <h3
-                className="eyebrow text-[1rem] flex items-center gap-2"
-                style={{ color: "var(--color-on-accent)" }}
+              <div
+                data-reveal
+                style={{ "--reveal-delay": "200ms" } as CSSProperties}
+                className="mt-11 flex items-center gap-3"
               >
-                {whatIsTherapy.addressesTitle}
-              </h3>
-
-              {whatIsTherapy.addressGroups.map((group, gi) => (
-                <div key={group.title} className={gi === 0 ? "mt-5 lg:mt-7" : "mt-8"}>
-                  <p className="text-sm font-medium uppercase tracking-[0.08em] text-on-accent-soft">
-                    {group.title}
-                  </p>
-                  <ul className="mt-3 border-t border-[color:var(--color-line-on-accent)]">
-                    {group.items.map((item, i) => (
-                      <li
-                        key={item}
-                        data-reveal
-                        style={
-                          { "--reveal-delay": `${140 + i * 40}ms` } as CSSProperties
-                        }
-                        className="flex items-baseline gap-3 border-b border-[color:var(--color-line-on-accent)] py-3 text-lg leading-snug text-on-accent lg:text-xl"
-                      >
-                        <AsteriskMark className="h-2.5 w-2.5 shrink-0 translate-y-1 text-on-accent/70" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-
-              <div className="mt-10 flex items-center gap-3 lg:mt-12">
-                <Link
-                  href="/contact"
-                  className="btn btn-on-accent group-arrow py-[18px]"
-                >
+                <Link href="/contact" className="btn btn-on-accent group-arrow py-[18px]">
                   <span>{CTA_LABEL}</span>
                 </Link>
                 <Link
@@ -167,6 +115,45 @@ export default function WhatIsTherapy() {
                   <ArrowIcon className="arrow-slide h-4 w-4" />
                 </Link>
               </div>
+            </div>
+
+            {/* Dreapta — motivele frecvente, pe două grupuri */}
+            <div className="lg:col-span-5 lg:col-start-8">
+              <h3 className="eyebrow text-on-accent">{whatIsTherapy.addressesTitle}</h3>
+
+              {whatIsTherapy.addressGroups.map((group, gi) => (
+                <div
+                  key={group.title}
+                  data-reveal-group
+                  className={gi === 0 ? "mt-8" : "mt-12"}
+                  style={{ "--stagger": "60ms" } as CSSProperties}
+                >
+                  <p className="font-display text-xl italic text-on-accent-soft">
+                    {group.title}
+                  </p>
+                  <ul className="mt-4">
+                    {group.items.map((item, i) => (
+                      <li
+                        key={item}
+                        data-reveal-child
+                        style={{ "--i": i } as CSSProperties}
+                        className="relative"
+                      >
+                        <span
+                          className="rule-draw rule-draw--on-accent absolute inset-x-0 top-0"
+                          style={{ "--reveal-delay": `${i * 60}ms` } as CSSProperties}
+                          aria-hidden
+                        />
+                        <span className="flex items-baseline gap-3 py-3.5 text-lg leading-snug text-on-accent lg:text-xl">
+                          <AsteriskMark className="h-2.5 w-2.5 shrink-0 translate-y-1 text-on-accent-soft" />
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                    <li aria-hidden className="rule-draw rule-draw--on-accent" />
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </div>

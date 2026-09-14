@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { site } from "@/lib/site";
+import SiteHeader from "@/components/site-header";
+import SiteFooter from "@/components/site-footer";
+import RevealProvider from "@/components/reveal-provider";
+import Cursor from "@/components/cursor";
 import "./globals.css";
 
 /* Playfair Display — titluri (H1-H4), cifre mari, accente în italic.
@@ -55,7 +59,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="ro"
       className={`${playfair.variable} ${helvetica.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="relative flex min-h-full flex-col">
+        <SiteHeader />
+        {children}
+        <SiteFooter />
+        {/* Observer unic pentru [data-reveal] + cursorul custom (doar mouse). */}
+        <RevealProvider />
+        <Cursor />
+      </body>
     </html>
   );
 }
