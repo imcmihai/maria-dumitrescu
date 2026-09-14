@@ -10,8 +10,8 @@ import Magnetic from "@/components/magnetic";
      stânga → text pe bej, aliniat la stânga și ancorat jos: eyebrow, H1 pe
               `.headline-1` (reveal pe cuvinte), lead + CTA magnetic, linie de
               meta cu indiciu de derulare;
-     dreapta → fotografie de fundal (dealuri), portret „polaroid” înclinat care
-              iese ușor peste cusătura dintre panouri, bara de cifre pe sticlă.
+     dreapta → fotografie de fundal (dealuri), portret „polaroid” centrat pe
+              coloană, bara de cifre pe sticlă.
    Tipografie: Helvetica peste tot; Playfair pe accentul din titlu, cifre și
    legende. Antetul e în layout (`SiteHeader`), suprapus peste ambele panouri. */
 export default function Hero() {
@@ -109,13 +109,11 @@ export default function Hero() {
           />
         </div>
 
-        {/* IMG: hero-maria | portret 4:5 | cadru: polaroid, înclinat */}
+        {/* IMG: hero-maria | portret 4:5 | cadru: polaroid */}
         <figure
           data-enter="rise"
-          style={
-            { "--enter-delay": "650ms", "--float-rotate": "-3deg" } as CSSProperties
-          }
-          className="relative z-10 mt-[5vh] w-[min(62%,14.5rem)] shrink-0 lg:mt-[9vh] lg:w-[min(48%,25rem)] lg:self-start lg:ml-[-3.5rem]"
+          style={{ "--enter-delay": "650ms" } as CSSProperties}
+          className="relative z-10 mt-[5vh] w-[min(62%,14.5rem)] shrink-0 lg:mt-[9vh] lg:w-[min(48%,25rem)] lg:self-center"
         >
           <div className="photo-float float-slow bg-panel">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[6px]">

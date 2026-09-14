@@ -151,6 +151,7 @@ Panourile de sticlă folosesc `backdrop-filter: blur()` peste fotografie, nu umb
 |---|---|---|
 | `--ease-out-soft` | `cubic-bezier(.22,1,.36,1)` | intrări, hover, alunecarea săgeții — implicit |
 | `--ease-in-out-soft` | `cubic-bezier(.65,0,.35,1)` | tranziții simetrice (rar) |
+| `--ease-curtain` | `cubic-bezier(.76,0,.24,1)` | cortina meniului mobil (§3.9) — accelerare-decelerare simetrică, mai „snap” decât `--ease-out-soft` |
 | `--enter` | `0.9s` | durata intrării la încărcare (`[data-enter]`) |
 
 Un singur observer, montat în layout (`components/reveal-provider.tsx`), pune
@@ -221,7 +222,7 @@ butonul-iconiță fără text vizibil primește `aria-label`.
 
 - **Desktop** — `.nav-paren`: linkuri „( despre mine )”, 14px/500, `--color-ink-soft`; parantezele sunt pseudo-elemente `--color-ink-faint` și se aprind măsliniu la hover / `[aria-current="page"]`.
 - **`.nav-pill` + `.nav-link`** — grupul-pastilă cu blur, păstrat pentru paginile interioare.
-- **Mobil** (`components/mobile-nav.tsx`) — buton „meniu” (`.btn-outline`, cu două linii care devin ✕) → panou pe tot ecranul, bej, linkurile pe `.headline-3` cu săgeată, CTA primar, WhatsApp și e-mail. `role="dialog"`, `aria-expanded`/`aria-controls`, Escape închide, scroll-ul paginii se blochează.
+- **Mobil** (`components/mobile-nav.tsx`) — buton „meniu” (`.btn-outline`, cu două linii care devin ✕) → cortină pe tot ecranul (§3.9), linkurile pe `.headline-3` cu index Playfair și săgeată, CTA primar, WhatsApp și e-mail. `role="dialog"`, `aria-expanded`/`aria-controls`, Escape închide, scroll-ul paginii se blochează.
 
 ### 2.3 Card — `.card`
 
@@ -316,7 +317,7 @@ aliniat cu paddingul interior al panourilor (`px-6 sm:px-12 lg:px-[4.625rem]`).
 ### 3.2 Hero
 Două panouri `--radius-xl` cu `gap-2.5`, `lg:min-h-svh`, `lg:grid-cols-2`.
 - **Stânga (bej)** — aliniat la stânga, ancorat jos, `justify-between`: eyebrow cu „✳” → H1 `.headline-1` `max-w-[14ch]` cu `<Words>` (reveal pe cuvinte, 350ms) → rând pe două coloane: lead `text-lg` `max-w-[40ch]` + grup `<Magnetic>` `.btn-primary` (+ `.btn-icon` pe telefon) → linie de meta cu bordură sus: rolul · „( derulează ) ↓”. Intrările `[data-enter]` în trepte: 200 / 350 / 800 / 950 / 1300ms.
-- **Dreapta (foto)** — fundalul (dealuri) într-un strat propriu decupat (`overflow-hidden rounded-xl`, `data-enter="zoom"`), ca polaroid-ul să poată ieși peste cusătură: `.photo-float.float-slow`, `aspect-[4/5]`, `--float-rotate: -3deg`, `lg:ml-[-3.5rem]`; jos, `.stat-bar.glass`.
+- **Dreapta (foto)** — fundalul (dealuri) într-un strat propriu decupat (`overflow-hidden rounded-xl`, `data-enter="zoom"`); polaroidul: `.photo-float.float-slow`, `aspect-[4/5]`, centrat pe coloană (`lg:self-center`), fără înclinare; jos, `.stat-bar.glass`.
 
 ### 3.3 Antet de secțiune — `components/section-head.tsx`
 Înlocuiește antetul centrat „✳ + eyebrow + H2”. Structură: rând cu
@@ -374,6 +375,32 @@ cea de dinainte. Ordinea și „temperatura” fiecăreia:
 
 `Approach` (05) e integrată pe Acasă în formă compactă (index de metode), nu ca
 grila de carduri-glass; grila rămâne disponibilă pentru `/servicii`.
+
+### 3.9 Cortina de meniu (mobil)
+`components/mobile-nav.tsx`. Nu e un panou care doar apare — e o cortină care
+coboară din antet și se retrage la loc, cu propriul ritm de intrare în trepte:
+
+1. **Panoul** (`.menu-curtain`) — `position: fixed`, lățime totală, `height: 0
+   → 100svh`. Colțul de jos pornește domat (`border-bottom-*-radius: 50%
+   72px`) și se aplatizează la `0% 0px` chiar în timpul aceleiași tranziții
+   (`--ease-curtain`, 0.85s) — cortina „se lasă”, nu doar crește. Închiderea e
+   strict tranziția inversă (se scoate `.is-open`), fără cod separat.
+2. **Fundalul** — aceleași linii organice ca în Poveste/Portrete/Cum
+   funcționează (`.line-art`, `pathLength=1`), redesenate pentru un ecran
+   vertical de telefon; se desenează abia după ce panoul s-a deschis
+   (`.is-in` comutat direct din `open`, nu din `RevealProvider` — la `height:
+   0` elementul n-ar intra niciodată în viewport pentru IntersectionObserver).
+3. **Conținutul** (`.menu-curtain-content`) — fade rapid la închidere (fără
+   întârziere), intră abia după ce cortina e aproape jos (`delay: 420ms`).
+4. **Rândurile** (`.menu-row`) — index Playfair (`.section-index`) → titlu pe
+   `.headline-3` cu `<Words>` (reveal pe cuvinte) → săgeată. La deschidere
+   intră în cascadă (`--i`, `delay: 480ms + i×80ms`); la închidere disting
+   simultan, fără cascadă, ca să nu rămână text vizibil după ce panoul s-a
+   strâns deja. CTA-ul de jos (`.menu-cta`) urmează ultimul (`delay: 800ms`).
+
+Pattern-ul e independent de reveal-urile de scroll (§1.6): nu folosește
+`[data-reveal]`/`RevealProvider`, ca să nu existe interferență între
+IntersectionObserver și starea de deschis/închis controlată din React.
 
 ---
 

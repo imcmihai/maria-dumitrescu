@@ -60,6 +60,7 @@
   /* --- Mișcare ---------------------------------------- */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-curtain: cubic-bezier(0.76, 0, 0.24, 1);
   --enter: 0.9s;
 }
 
@@ -1000,6 +1001,77 @@
   }
   .acc-panel.is-open {
     grid-template-rows: 1fr;
+  }
+
+  /* --- Curtain (meniu mobil) ------------------------ */
+
+  /* Panou plin-ecran care coboară din antet: înălțimea urcă 0 → 100dvh, iar
+     colțul de jos pornește domat (`50% ...px`) și se aplatizează spre 0 pe
+     măsură ce ajunge la bază — cortina „se lasă”, nu doar apare. Închiderea
+     e pur și simplu tranziția inversă (clasa `.is-open` se scoate). */
+  .menu-curtain {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: 60;
+    height: 0;
+    overflow: hidden;
+    background: var(--color-panel);
+    border-bottom-left-radius: 50% 72px;
+    border-bottom-right-radius: 50% 72px;
+    transition:
+      height 0.85s var(--ease-curtain),
+      border-bottom-left-radius 0.85s var(--ease-curtain),
+      border-bottom-right-radius 0.85s var(--ease-curtain);
+  }
+  .menu-curtain.is-open {
+    height: 100dvh;
+    height: 100svh;
+    border-bottom-left-radius: 0% 0px;
+    border-bottom-right-radius: 0% 0px;
+  }
+
+  /* Conținutul se estompează repede la închidere (fără întârziere) și intră
+     abia după ce cortina s-a lăsat aproape complet. */
+  .menu-curtain-content {
+    opacity: 0;
+    transition: opacity 0.3s var(--ease-out-soft);
+  }
+  .menu-curtain.is-open .menu-curtain-content {
+    opacity: 1;
+    transition-delay: 420ms;
+    transition-duration: 0.5s;
+  }
+
+  /* Rândurile de navigare — intră în cascadă (`--i`) după ce cortina s-a
+     așezat; la închidere dispar deodată, fără cascadă, ca să nu rămână text
+     vizibil după ce panoul s-a strâns. */
+  .menu-row {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+    transition:
+      opacity 0.5s var(--ease-out-soft),
+      transform 0.5s var(--ease-out-soft);
+  }
+  .menu-curtain.is-open .menu-row {
+    opacity: 1;
+    transform: none;
+    transition-duration: 0.8s;
+    transition-delay: calc(480ms + var(--i, 0) * 80ms);
+  }
+
+  .menu-cta {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+    transition:
+      opacity 0.4s var(--ease-out-soft),
+      transform 0.4s var(--ease-out-soft);
+  }
+  .menu-curtain.is-open .menu-cta {
+    opacity: 1;
+    transform: none;
+    transition-duration: 0.7s;
+    transition-delay: 800ms;
   }
 
   /* --- Wordmark uriaș (footer) --------------------- */

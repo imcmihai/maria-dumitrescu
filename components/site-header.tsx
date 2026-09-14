@@ -39,13 +39,6 @@ export default function SiteHeader() {
             <span>{CTA_LABEL}</span>
             <ArrowIcon className="arrow-slide h-4 w-4" />
           </Link>
-          <Link
-            href="/contact"
-            aria-label={CTA_LABEL}
-            className="btn-icon lg:hidden"
-          >
-            <ArrowIcon className="arrow-slide h-4 w-4" />
-          </Link>
           <MobileNav />
         </div>
       </div>
